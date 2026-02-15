@@ -107,11 +107,95 @@ Career path recommendations must be explainable - users should understand why sp
 
 ## Development Commands
 
-Commands will be added once project scaffolding is complete. Typical structure:
-- Backend: `uvicorn` for FastAPI development server
-- Frontend: `npm run dev` or `pnpm dev` for Next.js
-- Database: Neo4j connection via Bolt protocol (bolt://localhost:7687)
-- Testing: pytest for Python backend, Jest/Vitest for frontend
+### Backend (FastAPI)
+```bash
+cd backend
+
+# Create virtual environment (first time only)
+python -m venv venv
+
+# Activate virtual environment
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run development server with auto-reload
+python -m app.main
+# Or using uvicorn directly:
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
+# Run tests
+pytest
+
+# Run specific test file
+pytest tests/test_pathfinding.py -v
+```
+
+### Frontend (Next.js)
+```bash
+cd frontend
+
+# Install dependencies (first time only)
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Lint code
+npm run lint
+```
+
+### Database (Neo4j)
+```bash
+# Start Neo4j via Docker
+docker run -d \
+  --name neo4j \
+  -p 7474:7474 -p 7687:7687 \
+  -e NEO4J_AUTH=neo4j/your-password \
+  neo4j:5.16.0
+
+# Initialize schema (run Cypher script in Neo4j Browser)
+# Visit http://localhost:7474
+# Copy/paste contents of database/schema/init_schema.cypher
+
+# Or using cypher-shell CLI
+cat database/schema/init_schema.cypher | cypher-shell -u neo4j -p your-password
+```
+
+### Environment Setup
+```bash
+# Copy environment template
+cp .env.example .env
+
+# Edit .env with your credentials
+# Required: NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
+# Optional: API keys for external integrations
+```
+
+### Full Stack Development
+```bash
+# Terminal 1: Neo4j (if not using Docker)
+neo4j console
+
+# Terminal 2: Backend
+cd backend && source venv/bin/activate && python -m app.main
+
+# Terminal 3: Frontend
+cd frontend && npm run dev
+```
+
+Access points:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- API Docs (Swagger): http://localhost:8000/docs
+- Neo4j Browser: http://localhost:7474
 
 ## Neo4j Connection
 

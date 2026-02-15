@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(backend/app/services/ingestion/market_providers.py:*)"
+    ]
+  }
+}
