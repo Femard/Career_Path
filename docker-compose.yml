@@ -1,0 +1,38 @@
+services:
+  # ── Nginx reverse proxy ────────────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+
+  # ── Next.js frontend ───────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: ""   # URL relative → Nginx proxie /api/ vers le backend
+    restart: unless-stopped
+    environment:
+      PORT: "3000"
+
+  # ── FastAPI backend ────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    volumes:
+      - db_data:/app/data         # SQLite persistant
+    # Permet d'atteindre Ollama sur l'hôte via host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  db_data:
